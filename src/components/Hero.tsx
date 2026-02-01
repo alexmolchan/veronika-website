@@ -64,7 +64,7 @@ export default function Hero({ content }: { content: any }) {
           sizes="(max-width: 768px) 100vw, 480px"
         />
         <div className="absolute bottom-8 -left-8 lg:left-[-2rem] bg-grass text-white p-5 max-w-[280px]">
-          <p className="font-serif text-lg italic leading-relaxed">
+          <p className="font-serif text-lg leading-relaxed">
             «{content?.quote || 'Моя цель — чтобы вы всё больше могли опираться на себя'}»
           </p>
         </div>

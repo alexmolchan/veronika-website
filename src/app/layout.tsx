@@ -3,15 +3,15 @@ import { Inter, Cormorant_Garamond } from 'next/font/google'
 import './globals.css'
 
 const inter = Inter({
-  subsets: ['latin', 'cyrillic'],
+  subsets: ['cyrillic'],
+  weight: ['400', '500', '600'],
   display: 'swap',
   variable: '--font-inter',
 })
 
 const cormorant = Cormorant_Garamond({
-  subsets: ['latin', 'cyrillic'],
-  weight: ['400', '500', '600'],
-  style: ['normal', 'italic'],
+  subsets: ['cyrillic'],
+  weight: ['500'],
   display: 'swap',
   variable: '--font-cormorant',
 })
