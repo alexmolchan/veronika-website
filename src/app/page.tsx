@@ -19,14 +19,16 @@ export default async function Home() {
   return (
     <>
       <Header content={content} />
-      <Hero content={content} />
-      <MethodsBar content={content} />
-      <About content={content} />
-      <Services content={content} />
-      <Issues content={content} />
-      <Format content={content} />
-      <FAQ content={content} />
-      <Contact content={content} />
+      <main id="main-content">
+        <Hero content={content} />
+        <MethodsBar content={content} />
+        <About content={content} />
+        <Services content={content} />
+        <Issues content={content} />
+        <Format content={content} />
+        <FAQ content={content} />
+        <Contact content={content} />
+      </main>
       <Footer content={content} />
     </>
   )
