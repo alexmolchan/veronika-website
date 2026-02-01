@@ -1,4 +1,8 @@
+'use client'
+import { useForm } from '@/context/FormContext'
+
 export default function Contact({ content }: { content: any }) {
+  const { openModal } = useForm()
   const telegram = content?.telegram || 'https://t.me/veronika_hmelnickaya'
   const instagram = content?.instagram || 'https://www.instagram.com/hmelnickaya.club'
 
@@ -9,7 +13,7 @@ export default function Contact({ content }: { content: any }) {
           <span aria-hidden="true">+</span> Контакты
         </div>
         <h2 id="contact-title" className="font-serif text-3xl lg:text-4xl mb-4">Свяжитесь со мной</h2>
-        <p className="text-white">Напишите мне в удобный мессенджер</p>
+        <p className="text-white">Напишите мне в удобный мессенджер или оставьте заявку</p>
       </div>
       <div className="flex justify-center gap-4 mt-10 flex-wrap" role="list" aria-label="Социальные сети">
         <a
@@ -36,15 +40,13 @@ export default function Contact({ content }: { content: any }) {
         </a>
       </div>
       <div className="mt-10">
-        <a
-          href={telegram}
-          target="_blank"
-          rel="noopener noreferrer"
+        <button
+          onClick={openModal}
           className="inline-flex items-center gap-3 px-8 py-4 bg-white text-grass font-medium rounded-full hover:bg-charcoal hover:text-white transition-all focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-grass"
         >
-          {content?.bookingButtonText || 'Записаться на сессию'}
+          {content?.bookingButtonText || 'Записаться на консультацию'}
           <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-        </a>
+        </button>
       </div>
     </section>
   )

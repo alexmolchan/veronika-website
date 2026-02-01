@@ -1,7 +1,9 @@
 'use client'
 import { useState, useEffect, useCallback } from 'react'
+import { useForm } from '@/context/FormContext'
 
 export default function Header({ content }: { content: any }) {
+  const { openModal } = useForm()
   const [scrolled, setScrolled] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
 
@@ -13,6 +15,11 @@ export default function Header({ content }: { content: any }) {
 
   const toggleMenu = useCallback(() => setMenuOpen(prev => !prev), [])
   const closeMenu = useCallback(() => setMenuOpen(false), [])
+
+  const handleBooking = () => {
+    closeMenu()
+    openModal()
+  }
 
   return (
     <>
@@ -40,13 +47,13 @@ export default function Header({ content }: { content: any }) {
           <a href="#faq" className="text-gray text-sm font-medium hover:text-charcoal transition-colors focus:outline-none focus:text-grass">Вопросы</a>
         </nav>
 
-        <a
-          href="#contact"
+        <button
+          onClick={openModal}
           className="hidden md:flex items-center gap-2 px-6 py-3 bg-grass text-white text-sm font-medium rounded-full hover:bg-grass-dark transition-all focus:outline-none focus:ring-2 focus:ring-grass focus:ring-offset-2"
         >
           Связаться
           <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-        </a>
+        </button>
 
         {/* Mobile menu button */}
         <button
@@ -78,9 +85,9 @@ export default function Header({ content }: { content: any }) {
             <a href="#services" onClick={closeMenu} className="text-charcoal font-medium py-2 hover:text-grass transition-colors">Услуги</a>
             <a href="#format" onClick={closeMenu} className="text-charcoal font-medium py-2 hover:text-grass transition-colors">Формат</a>
             <a href="#faq" onClick={closeMenu} className="text-charcoal font-medium py-2 hover:text-grass transition-colors">Вопросы</a>
-            <a href="#contact" onClick={closeMenu} className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-grass text-white font-medium rounded-full mt-2">
+            <button onClick={handleBooking} className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-grass text-white font-medium rounded-full mt-2">
               Связаться
-            </a>
+            </button>
           </div>
         </nav>
       )}

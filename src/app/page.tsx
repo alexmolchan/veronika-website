@@ -9,6 +9,7 @@ import Format from '@/components/Format'
 import FAQ from '@/components/FAQ'
 import Contact from '@/components/Contact'
 import Footer from '@/components/Footer'
+import ClientWrapper from '@/components/ClientWrapper'
 
 // Static export - content updates require new build
 export const dynamic = 'force-static'
@@ -17,7 +18,7 @@ export default async function Home() {
   const content = await getSiteContent()
 
   return (
-    <>
+    <ClientWrapper content={content}>
       <Header content={content} />
       <main id="main-content">
         <Hero content={content} />
@@ -30,6 +31,6 @@ export default async function Home() {
         <Contact content={content} />
       </main>
       <Footer content={content} />
-    </>
+    </ClientWrapper>
   )
 }

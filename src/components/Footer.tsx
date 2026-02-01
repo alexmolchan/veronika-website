@@ -1,3 +1,5 @@
+import Link from 'next/link'
+
 export default function Footer({ content }: { content: any }) {
   return (
     <footer className="bg-charcoal text-white/85 py-12 px-[5%]">
@@ -6,10 +8,14 @@ export default function Footer({ content }: { content: any }) {
           {content?.name || 'Вероника'} {content?.lastName || 'Хмельницкая'}
         </div>
         <div className="flex gap-8 flex-wrap justify-center">
-          <a href="#" className="text-white/70 text-sm hover:text-white transition-colors">Договор оферты</a>
-          <a href="#" className="text-white/70 text-sm hover:text-white transition-colors">Политика конфиденциальности</a>
+          <Link href="/oferta" className="text-white/70 text-sm hover:text-white transition-colors">
+            Договор оферты
+          </Link>
+          <Link href="/privacy" className="text-white/70 text-sm hover:text-white transition-colors">
+            Политика конфиденциальности
+          </Link>
         </div>
-        <div className="text-xs text-white/70">© 2025 Все права защищены</div>
+        <div className="text-xs text-white/70">© 2026 Все права защищены</div>
       </div>
     </footer>
   )

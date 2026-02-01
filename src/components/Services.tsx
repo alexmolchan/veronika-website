@@ -1,6 +1,7 @@
 'use client'
 import { useState, useCallback } from 'react'
 import Image from 'next/image'
+import { useForm } from '@/context/FormContext'
 
 const defaultServices = [
   { id: 'consulting', title: 'Психологическое консультирование', price: '90 BYN', desc: 'Глубокая работа над проблемами в подходах КПТ, ACT, Схема-терапия.', image: '/images/service1.jpg' },
@@ -13,9 +14,15 @@ const defaultServices = [
 
 export default function Services({ content }: { content: any }) {
   const [activeModal, setActiveModal] = useState<string | null>(null)
+  const { openModal: openContactForm } = useForm()
 
   const openModal = useCallback((id: string) => setActiveModal(id), [])
   const closeModal = useCallback(() => setActiveModal(null), [])
+
+  const handleBooking = () => {
+    closeModal()
+    openContactForm()
+  }
 
   const services = content?.services?.split('\n').map((line: string, i: number) => {
     const [title, price, desc] = line.split('|').map((s: string) => s.trim())
@@ -44,12 +51,13 @@ export default function Services({ content }: { content: any }) {
               aria-label={`Подробнее об услуге: ${service.title}`}
               className="bg-off-white overflow-hidden cursor-pointer transition-all duration-300 hover:-translate-y-2 hover:shadow-xl group focus:outline-none focus:ring-2 focus:ring-grass focus:ring-offset-2"
             >
-              <div className="h-56 overflow-hidden relative">
+              {/* Square image container */}
+              <div className="aspect-square overflow-hidden relative">
                 <Image
                   src={service.image}
                   alt={service.title}
                   width={400}
-                  height={224}
+                  height={400}
                   loading="lazy"
                   className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                   sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
@@ -91,15 +99,13 @@ export default function Services({ content }: { content: any }) {
               <span className="inline-block bg-olive-light text-grass-dark px-5 py-2 font-semibold rounded-full mb-6">{activeService.price}</span>
               <p className="text-gray mb-6 leading-relaxed">{activeService.desc}</p>
               <div className="pt-6 border-t border-sand">
-                <a
-                  href={content?.telegram || 'https://t.me/veronika_hmelnickaya'}
-                  target="_blank"
-                  rel="noopener noreferrer"
+                <button
+                  onClick={handleBooking}
                   className="inline-flex items-center gap-3 px-8 py-4 bg-grass text-white font-medium rounded-full hover:bg-grass-dark transition-all focus:outline-none focus:ring-2 focus:ring-grass focus:ring-offset-2"
                 >
                   Записаться
                   <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-                </a>
+                </button>
               </div>
             </div>
           </div>

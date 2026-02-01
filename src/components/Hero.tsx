@@ -2,8 +2,11 @@
 
 import { urlFor } from '@/lib/sanity'
 import Image from 'next/image'
+import { useForm } from '@/context/FormContext'
 
 export default function Hero({ content }: { content: any }) {
+  const { openModal } = useForm()
+
   const stats = content?.stats?.split('\n').map((line: string) => {
     const [number, label] = line.split('|').map((s: string) => s.trim())
     return { number, label }
@@ -37,12 +40,12 @@ export default function Hero({ content }: { content: any }) {
               <path d="M5 12h14M12 5l7 7-7 7"/>
             </svg>
           </a>
-          <a
-            href="#contact"
+          <button
+            onClick={openModal}
             className="inline-flex items-center gap-3 px-8 py-4 border-2 border-grass text-grass font-medium rounded-full hover:bg-grass hover:text-white transition-colors focus:outline-none focus:ring-2 focus:ring-grass focus:ring-offset-2"
           >
             Записаться
-          </a>
+          </button>
         </div>
         <div className="flex gap-12 pt-8 border-t border-sand justify-center lg:justify-start">
           {stats.map((stat: any, i: number) => (

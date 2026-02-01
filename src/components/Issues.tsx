@@ -1,5 +1,5 @@
 'use client'
-import { useState } from 'react'
+import { useForm } from '@/context/FormContext'
 
 const defaultIssues = [
   'Эмоциональные трудности', 'Проблемы в отношениях', 'Самокритика', 'Низкая самооценка',
@@ -8,12 +8,20 @@ const defaultIssues = [
 ]
 
 export default function Issues({ content }: { content: any }) {
-  const [selected, setSelected] = useState<number[]>([])
+  const { selectedIssues, setSelectedIssues, openModal } = useForm()
 
   const issues = content?.issuesList?.split('\n').filter(Boolean) || defaultIssues
 
-  const toggle = (i: number) => {
-    setSelected(prev => prev.includes(i) ? prev.filter(x => x !== i) : [...prev, i])
+  const toggle = (issue: string) => {
+    setSelectedIssues(
+      selectedIssues.includes(issue)
+        ? selectedIssues.filter(x => x !== issue)
+        : [...selectedIssues, issue]
+    )
+  }
+
+  const handleBooking = () => {
+    openModal()
   }
 
   return (
@@ -29,22 +37,25 @@ export default function Issues({ content }: { content: any }) {
         {issues.map((issue: string, i: number) => (
           <div
             key={i}
-            onClick={() => toggle(i)}
+            onClick={() => toggle(issue)}
             className={`py-5 px-6 border text-center cursor-pointer transition-all select-none ${
-              selected.includes(i)
+              selectedIssues.includes(issue)
                 ? 'bg-grass border-grass'
                 : 'bg-white/5 border-white/10 hover:bg-white/10 hover:border-white/15'
             }`}
           >
-            <span className={selected.includes(i) ? 'text-white' : 'text-white/90'}>{issue}</span>
+            <span className={selectedIssues.includes(issue) ? 'text-white' : 'text-white/90'}>{issue}</span>
           </div>
         ))}
       </div>
-      <div className={`text-center mt-12 transition-all duration-400 ${selected.length > 0 ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-5 pointer-events-none'}`}>
-        <a href={content?.telegram || 'https://t.me/veronika_hmelnickaya'} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-3 px-8 py-4 bg-white text-grass font-medium rounded-full hover:bg-grass-light hover:text-white transition-all">
+      <div className={`text-center mt-12 transition-all duration-400 ${selectedIssues.length > 0 ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-5 pointer-events-none'}`}>
+        <button
+          onClick={handleBooking}
+          className="inline-flex items-center gap-3 px-8 py-4 bg-white text-grass font-medium rounded-full hover:bg-grass-light hover:text-white transition-all"
+        >
           Записаться
           <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-        </a>
+        </button>
       </div>
     </section>
   )
