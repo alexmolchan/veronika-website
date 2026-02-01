@@ -10,7 +10,8 @@ import FAQ from '@/components/FAQ'
 import Contact from '@/components/Contact'
 import Footer from '@/components/Footer'
 
-export const revalidate = 60 // Revalidate every 60 seconds
+// Static export - content updates require new build
+export const dynamic = 'force-static'
 
 export default async function Home() {
   const content = await getSiteContent()
