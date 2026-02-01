@@ -5,7 +5,7 @@ export default function Contact({ content }: { content: any }) {
   return (
     <section id="contact" className="py-28 px-[5%] bg-grass text-white text-center" aria-labelledby="contact-title">
       <div className="max-w-xl mx-auto">
-        <div className="inline-flex items-center gap-2 text-xs uppercase tracking-[0.2em] text-white/70 mb-4 font-semibold">
+        <div className="inline-flex items-center gap-2 text-xs uppercase tracking-[0.2em] text-white mb-4 font-semibold">
           <span aria-hidden="true">+</span> Контакты
         </div>
         <h2 id="contact-title" className="font-serif text-3xl lg:text-4xl mb-4">Свяжитесь со мной</h2>

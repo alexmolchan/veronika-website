@@ -23,7 +23,7 @@ export default function Issues({ content }: { content: any }) {
           <span>+</span> Запросы
         </div>
         <h2 className="font-serif text-3xl lg:text-4xl mb-4">С чем ко мне можно обратиться</h2>
-        <p className="text-white/70">Выберите то, что вас беспокоит</p>
+        <p className="text-white/85">Выберите то, что вас беспокоит</p>
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 max-w-5xl mx-auto">
         {issues.map((issue: string, i: number) => (

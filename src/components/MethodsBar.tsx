@@ -10,7 +10,7 @@ export default function MethodsBar({ content }: { content: any }) {
   return (
     <div className="bg-charcoal py-8 px-[5%]">
       <div className="flex flex-col md:flex-row items-center justify-between gap-6 flex-wrap">
-        <div className="text-gray-light text-xs uppercase tracking-[0.2em] font-medium whitespace-nowrap">
+        <div className="text-white/70 text-xs uppercase tracking-[0.2em] font-medium whitespace-nowrap">
           Методы работы
         </div>
         <div className="flex gap-8 flex-wrap justify-center flex-1">
