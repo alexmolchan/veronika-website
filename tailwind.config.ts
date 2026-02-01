@@ -19,8 +19,8 @@ const config: Config = {
         sand: '#E5E2DA',
         charcoal: '#2D2D2D',
         dark: '#1A1A1A',
-        gray: '#6B6B6B',
-        'gray-light': '#9A9A9A',
+        gray: '#595959',
+        'gray-light': '#767676',
       },
       fontFamily: {
         serif: ['Cormorant Garamond', 'serif'],

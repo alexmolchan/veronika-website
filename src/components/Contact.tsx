@@ -9,7 +9,7 @@ export default function Contact({ content }: { content: any }) {
           <span aria-hidden="true">+</span> Контакты
         </div>
         <h2 id="contact-title" className="font-serif text-3xl lg:text-4xl mb-4">Свяжитесь со мной</h2>
-        <p className="text-white/85">Напишите мне в удобный мессенджер</p>
+        <p className="text-white">Напишите мне в удобный мессенджер</p>
       </div>
       <div className="flex justify-center gap-4 mt-10 flex-wrap" role="list" aria-label="Социальные сети">
         <a
