@@ -14,16 +14,16 @@ interface FormData {
   turnstileToken: string
 }
 
-export const onRequestPost: PagesFunction<Env> = async (context) => {
+export const onRequestPost = async (context: { request: Request; env: Env }) => {
   const { request, env } = context
 
   try {
     const data: FormData = await request.json()
 
     // Validate required fields
-    if (!data.name || !data.email || !data.contact) {
+    if (!data.name || !data.contact) {
       return new Response(
-        JSON.stringify({ error: 'Заполните все обязательные поля' }),
+        JSON.stringify({ error: 'Заполните имя и контакт для связи' }),
         { status: 400, headers: { 'Content-Type': 'application/json' } }
       )
     }
@@ -66,8 +66,8 @@ export const onRequestPost: PagesFunction<Env> = async (context) => {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        from: 'Сайт <noreply@veronika-website.pages.dev>',
-        to: [env.RECIPIENT_EMAIL || 'veronika@example.com'],
+        from: 'Сайт <noreply@hmelnickaya.com>',
+        to: ['verona.khm@yandex.ru', 'alex.molchan@gmail.com'],
         subject: `Новая заявка от ${data.name}`,
         html: `
           <h2>Новая заявка с сайта</h2>
@@ -78,7 +78,7 @@ export const onRequestPost: PagesFunction<Env> = async (context) => {
           ${data.message ? `<p><strong>Сообщение:</strong></p><p>${data.message}</p>` : ''}
           ${issuesList}
           <hr>
-          <p style="color: #666; font-size: 12px;">Это письмо отправлено автоматически с сайта veronika-website.pages.dev</p>
+          <p style="color: #666; font-size: 12px;">Это письмо отправлено автоматически с сайта hmelnickaya.com</p>
         `,
       }),
     })
@@ -87,31 +87,33 @@ export const onRequestPost: PagesFunction<Env> = async (context) => {
       console.error('Failed to send admin email:', await adminEmailResponse.text())
     }
 
-    // Send confirmation email to client
-    const clientEmailResponse = await fetch('https://api.resend.com/emails', {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${env.RESEND_API_KEY}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        from: 'Вероника Хмельницкая <noreply@veronika-website.pages.dev>',
-        to: [data.email],
-        subject: 'Спасибо за обращение!',
-        html: `
-          <h2>Здравствуйте, ${data.name}!</h2>
-          <p>Спасибо, что обратились ко мне. Я получила вашу заявку и свяжусь с вами в течение 24 часов.</p>
-          ${data.issues.length > 0 ? `<p>Вы выбрали следующие темы для работы:</p><ul>${data.issues.map(i => `<li>${i}</li>`).join('')}</ul>` : ''}
-          <p>Если у вас есть срочный вопрос, вы можете написать мне напрямую в Telegram: <a href="https://t.me/veronika_hmelnickaya">@veronika_hmelnickaya</a></p>
-          <p>С теплом,<br>Вероника Хмельницкая<br>Психолог, коуч</p>
-          <hr>
-          <p style="color: #666; font-size: 12px;">Это автоматическое письмо, пожалуйста, не отвечайте на него.</p>
-        `,
-      }),
-    })
+    // Send confirmation email to client (only if email provided)
+    if (data.email) {
+      const clientEmailResponse = await fetch('https://api.resend.com/emails', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${env.RESEND_API_KEY}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          from: 'Вероника Хмельницкая <noreply@hmelnickaya.com>',
+          to: [data.email],
+          subject: 'Спасибо за обращение!',
+          html: `
+            <h2>Здравствуйте, ${data.name}!</h2>
+            <p>Спасибо, что обратились ко мне. Я получила вашу заявку и свяжусь с вами в течение 24 часов.</p>
+            ${data.issues.length > 0 ? `<p>Вы выбрали следующие темы для работы:</p><ul>${data.issues.map(i => `<li>${i}</li>`).join('')}</ul>` : ''}
+            <p>Если у вас есть срочный вопрос, вы можете написать мне напрямую в Telegram: <a href="https://t.me/veronika_hmelnickaya">@veronika_hmelnickaya</a></p>
+            <p>С теплом,<br>Вероника Хмельницкая<br>Психолог, коуч</p>
+            <hr>
+            <p style="color: #666; font-size: 12px;">Это автоматическое письмо, пожалуйста, не отвечайте на него.</p>
+          `,
+        }),
+      })
 
-    if (!clientEmailResponse.ok) {
-      console.error('Failed to send client email:', await clientEmailResponse.text())
+      if (!clientEmailResponse.ok) {
+        console.error('Failed to send client email:', await clientEmailResponse.text())
+      }
     }
 
     return new Response(

@@ -2,12 +2,7 @@
 import { useState, useEffect, useRef } from 'react'
 import { useForm } from '@/context/FormContext'
 import { useRouter } from 'next/navigation'
-
-const messengers = [
-  { id: 'telegram', name: 'Telegram', icon: '📱' },
-  { id: 'whatsapp', name: 'WhatsApp', icon: '💬' },
-  { id: 'phone', name: 'Телефон', icon: '📞' },
-]
+import { trackFormSubmit } from '@/lib/analytics'
 
 export default function ContactModal({ content }: { content: any }) {
   const { isModalOpen, closeModal, selectedIssues } = useForm()
@@ -16,25 +11,49 @@ export default function ContactModal({ content }: { content: any }) {
 
   const [formData, setFormData] = useState({
     name: '',
-    email: '',
-    messenger: 'telegram',
     contact: '',
-    message: '',
   })
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [error, setError] = useState('')
   const [turnstileToken, setTurnstileToken] = useState('')
+  const turnstileRef = useRef<HTMLDivElement>(null)
+  const widgetIdRef = useRef<string | null>(null)
 
-  // Load Turnstile script
+  // Load Turnstile script and render widget
   useEffect(() => {
-    if (isModalOpen && typeof window !== 'undefined') {
-      const script = document.createElement('script')
-      script.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js'
-      script.async = true
-      document.head.appendChild(script)
+    if (!isModalOpen) return
 
-      return () => {
-        document.head.removeChild(script)
+    const renderWidget = () => {
+      if (turnstileRef.current && (window as any).turnstile && !widgetIdRef.current) {
+        widgetIdRef.current = (window as any).turnstile.render(turnstileRef.current, {
+          sitekey: process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY || '0x4AAAAAAAxPpvNwfXTbZ8xe',
+          callback: (token: string) => {
+            setTurnstileToken(token)
+          },
+          'error-callback': () => {
+            setError('Ошибка проверки безопасности. Обновите страницу.')
+          },
+          theme: 'light',
+          size: 'invisible',
+        })
+      }
+    }
+
+    // Check if script already loaded
+    if ((window as any).turnstile) {
+      renderWidget()
+    } else {
+      const script = document.createElement('script')
+      script.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit'
+      script.async = true
+      script.onload = renderWidget
+      document.head.appendChild(script)
+    }
+
+    return () => {
+      if (widgetIdRef.current && (window as any).turnstile) {
+        (window as any).turnstile.remove(widgetIdRef.current)
+        widgetIdRef.current = null
       }
     }
   }, [isModalOpen])
@@ -72,7 +91,11 @@ export default function ContactModal({ content }: { content: any }) {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          ...formData,
+          name: formData.name,
+          email: '', // Not collecting email in simplified form
+          messenger: 'telegram',
+          contact: formData.contact,
+          message: '',
           issues: selectedIssues,
           turnstileToken,
         }),
@@ -83,6 +106,9 @@ export default function ContactModal({ content }: { content: any }) {
       if (!response.ok) {
         throw new Error(data.error || 'Ошибка отправки')
       }
+
+      // Track form submission in GA4
+      trackFormSubmit()
 
       closeModal()
       router.push('/thank-you')
@@ -97,7 +123,7 @@ export default function ContactModal({ content }: { content: any }) {
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm"
+      className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/60 backdrop-blur-sm"
       onClick={(e) => e.target === e.currentTarget && closeModal()}
       role="dialog"
       aria-modal="true"
@@ -105,13 +131,16 @@ export default function ContactModal({ content }: { content: any }) {
     >
       <div
         ref={modalRef}
-        className="bg-white rounded-2xl w-full max-w-lg max-h-[90vh] overflow-y-auto shadow-2xl"
+        className="bg-white rounded-t-3xl sm:rounded-2xl w-full sm:max-w-md max-h-[85vh] overflow-y-auto shadow-2xl animate-slide-up sm:animate-none"
       >
         {/* Header */}
         <div className="sticky top-0 bg-white px-6 py-5 border-b border-gray-100 flex justify-between items-center">
-          <h2 id="modal-title" className="font-serif text-2xl text-charcoal">
-            {content?.formTitle || 'Записаться на консультацию'}
-          </h2>
+          <div>
+            <h2 id="modal-title" className="font-serif text-xl sm:text-2xl text-charcoal">
+              Записаться
+            </h2>
+            <p className="text-sm text-gray mt-1">Свяжусь с вами в течение 24 часов</p>
+          </div>
           <button
             onClick={closeModal}
             className="p-2 hover:bg-gray-100 rounded-full transition-colors"
@@ -125,10 +154,9 @@ export default function ContactModal({ content }: { content: any }) {
 
         {/* Form */}
         <form onSubmit={handleSubmit} className="p-6 space-y-5">
-          {/* Selected Issues */}
+          {/* Selected Issues - compact */}
           {selectedIssues.length > 0 && (
-            <div className="bg-olive-light rounded-xl p-4">
-              <p className="text-sm text-grass-dark font-medium mb-2">Выбранные запросы:</p>
+            <div className="bg-olive-light rounded-xl p-3">
               <div className="flex flex-wrap gap-2">
                 {selectedIssues.map((issue, i) => (
                   <span key={i} className="bg-white px-3 py-1 rounded-full text-sm text-charcoal">
@@ -142,7 +170,7 @@ export default function ContactModal({ content }: { content: any }) {
           {/* Name */}
           <div>
             <label htmlFor="name" className="block text-sm font-medium text-charcoal mb-2">
-              Ваше имя <span className="text-red-500">*</span>
+              Ваше имя
             </label>
             <input
               type="text"
@@ -150,90 +178,29 @@ export default function ContactModal({ content }: { content: any }) {
               required
               value={formData.name}
               onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-              className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-grass focus:border-transparent transition-all"
+              className="w-full px-4 py-4 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-grass focus:border-transparent transition-all text-lg"
               placeholder="Как к вам обращаться?"
             />
           </div>
 
-          {/* Email */}
-          <div>
-            <label htmlFor="email" className="block text-sm font-medium text-charcoal mb-2">
-              Email <span className="text-red-500">*</span>
-            </label>
-            <input
-              type="email"
-              id="email"
-              required
-              value={formData.email}
-              onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-              className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-grass focus:border-transparent transition-all"
-              placeholder="email@example.com"
-            />
-          </div>
-
-          {/* Messenger */}
-          <div>
-            <label className="block text-sm font-medium text-charcoal mb-2">
-              Предпочтительный способ связи
-            </label>
-            <div className="grid grid-cols-3 gap-2">
-              {messengers.map((m) => (
-                <button
-                  key={m.id}
-                  type="button"
-                  onClick={() => setFormData({ ...formData, messenger: m.id })}
-                  className={`py-3 px-4 rounded-xl border text-sm font-medium transition-all ${
-                    formData.messenger === m.id
-                      ? 'bg-grass text-white border-grass'
-                      : 'bg-white text-charcoal border-gray-200 hover:border-grass'
-                  }`}
-                >
-                  <span className="mr-1">{m.icon}</span> {m.name}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          {/* Contact (phone/username) */}
+          {/* Contact - simplified to one field */}
           <div>
             <label htmlFor="contact" className="block text-sm font-medium text-charcoal mb-2">
-              {formData.messenger === 'phone' ? 'Номер телефона' :
-               formData.messenger === 'telegram' ? 'Telegram (@username или номер)' :
-               'WhatsApp (номер телефона)'} <span className="text-red-500">*</span>
+              Telegram или телефон
             </label>
             <input
-              type={formData.messenger === 'phone' || formData.messenger === 'whatsapp' ? 'tel' : 'text'}
+              type="text"
               id="contact"
               required
               value={formData.contact}
               onChange={(e) => setFormData({ ...formData, contact: e.target.value })}
-              className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-grass focus:border-transparent transition-all"
-              placeholder={formData.messenger === 'telegram' ? '@username' : '+375...'}
+              className="w-full px-4 py-4 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-grass focus:border-transparent transition-all text-lg"
+              placeholder="@username или +375..."
             />
           </div>
 
-          {/* Message */}
-          <div>
-            <label htmlFor="message" className="block text-sm font-medium text-charcoal mb-2">
-              Расскажите немного о вашем запросе
-            </label>
-            <textarea
-              id="message"
-              rows={3}
-              value={formData.message}
-              onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-              className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-grass focus:border-transparent transition-all resize-none"
-              placeholder="Что вас беспокоит? С чем хотели бы поработать?"
-            />
-          </div>
-
-          {/* Turnstile Widget */}
-          <div
-            className="cf-turnstile"
-            data-sitekey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY || '1x00000000000000000000AA'}
-            data-callback={(token: string) => setTurnstileToken(token)}
-            data-theme="light"
-          />
+          {/* Turnstile Widget - invisible */}
+          <div ref={turnstileRef} />
 
           {/* Error */}
           {error && (
@@ -246,7 +213,8 @@ export default function ContactModal({ content }: { content: any }) {
           <button
             type="submit"
             disabled={isSubmitting}
-            className="w-full py-4 bg-grass text-white font-medium rounded-full hover:bg-grass-dark transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+            className="w-full py-4 bg-grass text-white font-medium rounded-full hover:bg-grass-dark transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 text-lg"
+            data-gtm="cta-form-submit"
           >
             {isSubmitting ? (
               <>
@@ -257,7 +225,7 @@ export default function ContactModal({ content }: { content: any }) {
                 Отправка...
               </>
             ) : (
-              content?.formButtonText || 'Отправить заявку'
+              'Отправить заявку'
             )}
           </button>
 

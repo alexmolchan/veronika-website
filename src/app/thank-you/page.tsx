@@ -1,5 +1,6 @@
 import { getSiteContent } from '@/lib/sanity'
 import Link from 'next/link'
+import ThankYouTracker from '@/components/ThankYouTracker'
 
 export const dynamic = 'force-static'
 
@@ -14,6 +15,7 @@ export default async function ThankYouPage() {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-olive-light px-[5%] py-20">
+      <ThankYouTracker />
       <div className="max-w-md text-center">
         {/* Success Icon */}
         <div className="w-20 h-20 mx-auto mb-8 bg-grass rounded-full flex items-center justify-center">

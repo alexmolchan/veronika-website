@@ -10,6 +10,7 @@ import FAQ from '@/components/FAQ'
 import Contact from '@/components/Contact'
 import Footer from '@/components/Footer'
 import ClientWrapper from '@/components/ClientWrapper'
+import StickyBookButton from '@/components/StickyBookButton'
 
 // Static export - content updates require new build
 export const dynamic = 'force-static'
@@ -20,7 +21,7 @@ export default async function Home() {
   return (
     <ClientWrapper content={content}>
       <Header content={content} />
-      <main id="main-content">
+      <main id="main-content" className="pb-24 lg:pb-0">
         <Hero content={content} />
         <MethodsBar content={content} />
         <About content={content} />
@@ -31,6 +32,7 @@ export default async function Home() {
         <Contact content={content} />
       </main>
       <Footer content={content} />
+      <StickyBookButton />
     </ClientWrapper>
   )
 }

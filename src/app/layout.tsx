@@ -1,6 +1,9 @@
 import type { Metadata, Viewport } from 'next'
 import { Inter, Cormorant_Garamond } from 'next/font/google'
+import Script from 'next/script'
 import './globals.css'
+
+const GA_ID = 'G-HHHF44WDM5'
 
 const inter = Inter({
   subsets: ['cyrillic'],
@@ -28,7 +31,19 @@ export const metadata: Metadata = {
   keywords: 'психолог Минск, коуч, КПТ, когнитивно-поведенческая терапия, психотерапия, консультирование, онлайн психолог',
   authors: [{ name: 'Вероника Хмельницкая' }],
   creator: 'Вероника Хмельницкая',
-  metadataBase: new URL('https://veronika-website.pages.dev'),
+  metadataBase: new URL('https://hmelnickaya.com'),
+  manifest: '/site.webmanifest',
+  icons: {
+    icon: [
+      { url: '/favicon.svg', type: 'image/svg+xml' },
+      { url: '/favicon-32x32.png', sizes: '32x32', type: 'image/png' },
+      { url: '/favicon-16x16.png', sizes: '16x16', type: 'image/png' },
+    ],
+    apple: '/apple-touch-icon.png',
+    other: [
+      { rel: 'mask-icon', url: '/favicon.svg', color: '#5B8C5A' },
+    ],
+  },
   alternates: {
     canonical: '/',
   },
@@ -37,14 +52,14 @@ export const metadata: Metadata = {
     description: 'Дипломированный психолог, консультант в когнитивно-поведенческом подходе. Помогу разобраться в себе и найти опору внутри.',
     type: 'website',
     locale: 'ru_RU',
-    url: 'https://veronika-website.pages.dev',
+    url: 'https://hmelnickaya.com',
     siteName: 'Вероника Хмельницкая',
     images: [
       {
-        url: '/images/hero.jpg',
+        url: '/og-image.jpg',
         width: 1200,
         height: 630,
-        alt: 'Вероника Хмельницкая — Психолог',
+        alt: 'Вероника Хмельницкая — Психолог, Коуч',
       },
     ],
   },
@@ -52,7 +67,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Вероника Хмельницкая — Психолог, Коуч',
     description: 'Дипломированный психолог, консультант в когнитивно-поведенческом подходе.',
-    images: ['/images/hero.jpg'],
+    images: ['/og-image.jpg'],
   },
   robots: {
     index: true,
@@ -68,6 +83,23 @@ export default function RootLayout({
   return (
     <html lang="ru" className={`${inter.variable} ${cormorant.variable}`}>
       <head>
+        {/* Google Analytics 4 */}
+        <Script
+          src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`}
+          strategy="afterInteractive"
+        />
+        <Script
+          id="ga4-config"
+          strategy="afterInteractive"
+          dangerouslySetInnerHTML={{
+            __html: `
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments);}
+              gtag('js', new Date());
+              gtag('config', '${GA_ID}');
+            `,
+          }}
+        />
         <link rel="preconnect" href="https://cdn.sanity.io" crossOrigin="anonymous" />
         <link rel="dns-prefetch" href="https://cdn.sanity.io" />
         <script
@@ -78,7 +110,7 @@ export default function RootLayout({
               "@type": "ProfessionalService",
               "name": "Вероника Хмельницкая",
               "description": "Психолог, коуч, консультант в когнитивно-поведенческом подходе",
-              "url": "https://veronika-website.pages.dev",
+              "url": "https://hmelnickaya.com",
               "telephone": "+375",
               "priceRange": "90-160 BYN",
               "address": {

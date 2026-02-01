@@ -4,12 +4,11 @@ import Image from 'next/image'
 import { useForm } from '@/context/FormContext'
 
 const defaultServices = [
-  { id: 'consulting', title: 'Психологическое консультирование', price: '90 BYN', desc: 'Глубокая работа над проблемами в подходах КПТ, ACT, Схема-терапия.', image: '/images/service1.jpg' },
-  { id: 'coaching', title: 'Коучинг', price: 'от 90 BYN', desc: 'ICF-коучинг и эмбодимент-коучинг. Развитие понимания себя, достижение целей.', image: '/images/service2.jpg' },
-  { id: 'actgame', title: 'ACT-Game', price: 'от 110 BYN', desc: 'Психотерапевтическая игра для развития психологической гибкости.', image: '/images/service3.jpg' },
-  { id: 'meditation', title: 'Занятие по медитациям', price: '95 BYN', desc: 'Подбор практик под запрос, инструкции и личный план с аудиозаписями.', image: '/images/service4.jpg' },
-  { id: 'library', title: 'Библиотека медитаций', price: '85 BYN / месяц', desc: '18 аудио-записей медитаций в закрытой ТГ-группе.', image: '/images/service5.jpg' },
-  { id: 'corporate', title: 'Корпоративный формат', price: 'По запросу', desc: 'Лекции, вебинары, тренинги. Поддержка руководителей и команд.', image: '/images/service6.jpg' },
+  { id: 'consulting', title: 'Психологическое консультирование', price: '90 BYN', desc: 'Работа над проблемами и задачами в подходах КПТ, ACT, Схема-терапия. Для тех, кто хочет разобраться с трудностями, кризисами, стрессом и внутренними переживаниями.', image: '/images/service1.jpg' },
+  { id: 'coaching', title: 'Коучинг', price: 'от 90 BYN', desc: 'ICF-коучинг (от 145 BYN) и эмбодимент-коучинг (90 BYN). Развитие понимания себя, достижение целей, баланс работы и жизни.', image: '/images/service2.jpg' },
+  { id: 'actgame', title: 'ACT-Game', price: 'от 110 BYN', desc: 'Психотерапевтическая игра для развития психологической гибкости. Групповой формат (110 BYN) или индивидуальный (160 BYN).', image: '/images/service3.jpg' },
+  { id: 'meditation', title: 'Занятие по медитациям', price: '95 BYN', desc: 'Подбор практик под ваш запрос, понятные инструкции, совместное выполнение и личный план с аудиозаписями после занятия.', image: '/images/service4.jpg' },
+  { id: 'library', title: 'Библиотека медитаций', price: '85 BYN', desc: 'Аудио-записи медитаций осознанности в закрытой ТГ-группе. Медитации для тела, эмоций, мыслей, действий и отношений.', image: '/images/service5.jpg' },
 ]
 
 export default function Services({ content }: { content: any }) {
