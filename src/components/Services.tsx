@@ -24,10 +24,15 @@ export default function Services({ content }: { content: any }) {
     openContactForm()
   }
 
-  const services = content?.services?.split('\n').map((line: string, i: number) => {
-    const [title, price, desc] = line.split('|').map((s: string) => s.trim())
-    return { ...defaultServices[i], title: title || defaultServices[i].title, price: price || defaultServices[i].price, desc: desc || defaultServices[i].desc }
-  }) || defaultServices
+  // Always use all defaultServices, override with Sanity content when available
+  const sanityLines = content?.services?.split('\n') || []
+  const services = defaultServices.map((defaultService, i) => {
+    if (i < sanityLines.length && sanityLines[i]?.trim()) {
+      const [title, price, desc] = sanityLines[i].split('|').map((s: string) => s.trim())
+      return { ...defaultService, title: title || defaultService.title, price: price || defaultService.price, desc: desc || defaultService.desc }
+    }
+    return defaultService
+  })
 
   const activeService = services.find((s: any) => s.id === activeModal)
 
