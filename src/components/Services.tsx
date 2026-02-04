@@ -9,6 +9,7 @@ const defaultServices = [
   { id: 'actgame', title: 'ACT-Game', price: 'от 110 BYN', desc: 'Психотерапевтическая игра для развития психологической гибкости. Групповой формат (110 BYN) или индивидуальный (160 BYN).', image: '/images/service3.jpg' },
   { id: 'meditation', title: 'Занятие по медитациям', price: '95 BYN', desc: 'Подбор практик под ваш запрос, понятные инструкции, совместное выполнение и личный план с аудиозаписями после занятия.', image: '/images/service4.jpg' },
   { id: 'library', title: 'Библиотека медитаций', price: '85 BYN', desc: 'Аудио-записи медитаций осознанности в закрытой ТГ-группе. Медитации для тела, эмоций, мыслей, действий и отношений.', image: '/images/service5.jpg' },
+  { id: 'corporate', title: 'Корпоративный формат', price: 'По запросу', desc: 'Лекции, тренинги, воркшопы для команд. Темы: стресс, выгорание, коммуникация, эмоциональный интеллект.', image: '/images/service6.jpg' },
 ]
 
 export default function Services({ content }: { content: any }) {
