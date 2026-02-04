@@ -26,7 +26,7 @@ export default function ContactModal({ content }: { content: any }) {
     const renderWidget = () => {
       if (turnstileRef.current && (window as any).turnstile && !widgetIdRef.current) {
         widgetIdRef.current = (window as any).turnstile.render(turnstileRef.current, {
-          sitekey: process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY || '0x4AAAAAAAxPpvNwfXTbZ8xe',
+          sitekey: process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY || '0x4AAAAAACWdkPj6eppzY5wO',
           callback: (token: string) => {
             setTurnstileToken(token)
           },
