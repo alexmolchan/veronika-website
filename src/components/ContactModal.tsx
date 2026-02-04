@@ -26,8 +26,8 @@ export default function ContactModal({ content }: { content: any }) {
     const renderWidget = () => {
       if (turnstileRef.current && (window as any).turnstile && !widgetIdRef.current) {
         widgetIdRef.current = (window as any).turnstile.render(turnstileRef.current, {
-          // Turnstile site key - configured in Cloudflare Pages environment variables
-        sitekey: process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY || '0x4AAAAAACWdkPj6eppzY5wO',
+          // Turnstile site key - uses env variable from Cloudflare Pages (rebuild: 2026-02-04)
+          sitekey: process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY || '0x4AAAAAACWdkPj6eppzY5wO',
           callback: (token: string) => {
             setTurnstileToken(token)
           },
