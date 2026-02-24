@@ -143,10 +143,6 @@ export default function ContactModal({ content }: { content: any }) {
       const data = await response.json()
 
       if (!response.ok) {
-        // Temporary debug: log server response
-        if (data.debug) {
-          console.error('Turnstile debug:', JSON.stringify(data.debug))
-        }
         throw new Error(data.error || 'Ошибка отправки')
       }
 
