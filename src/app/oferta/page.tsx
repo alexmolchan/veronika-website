@@ -1,4 +1,4 @@
-import { getSiteContent } from '@/lib/sanity'
+import { getSiteContent } from '@/lib/content'
 import Link from 'next/link'
 
 export const dynamic = 'force-static'
@@ -8,8 +8,8 @@ export const metadata = {
   description: 'Публичная оферта на оказание консультационных услуг',
 }
 
-export default async function OfertaPage() {
-  const content = await getSiteContent()
+export default function OfertaPage() {
+  const content = getSiteContent()
 
   const defaultOferta = `
 ## 1. Общие положения

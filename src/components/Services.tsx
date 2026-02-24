@@ -170,11 +170,11 @@ export default function Services({ content }: { content: any }) {
     openContactForm()
   }
 
-  // Always use all defaultServices, override with Sanity content when available
-  const sanityLines = content?.services?.split('\n') || []
+  // Override default services with content data when available
+  const contentLines = content?.services?.split('\n') || []
   const services = defaultServices.map((defaultService, i) => {
-    if (i < sanityLines.length && sanityLines[i]?.trim()) {
-      const [title, price, desc] = sanityLines[i].split('|').map((s: string) => s.trim())
+    if (i < contentLines.length && contentLines[i]?.trim()) {
+      const [title, price, desc] = contentLines[i].split('|').map((s: string) => s.trim())
       return { ...defaultService, title: title || defaultService.title, price: price || defaultService.price, desc: desc || defaultService.desc }
     }
     return defaultService

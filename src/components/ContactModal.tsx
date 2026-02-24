@@ -82,12 +82,50 @@ export default function ContactModal({ content }: { content: any }) {
     }
   }, [isModalOpen])
 
+  // Get a fresh Turnstile token, either from state or by executing the widget
+  const getTurnstileToken = (): Promise<string> => {
+    return new Promise((resolve, reject) => {
+      // If we already have a token, use it
+      if (turnstileToken) {
+        resolve(turnstileToken)
+        return
+      }
+
+      const turnstile = (window as any).turnstile
+      if (!turnstile || !widgetIdRef.current) {
+        reject(new Error('Ошибка проверки безопасности. Обновите страницу.'))
+        return
+      }
+
+      // Reset and re-execute the invisible widget to get a fresh token
+      turnstile.reset(widgetIdRef.current)
+
+      // Wait for the callback to fire with a new token
+      const timeout = setTimeout(() => {
+        reject(new Error('Время проверки безопасности истекло. Попробуйте ещё раз.'))
+      }, 15000)
+
+      const checkInterval = setInterval(() => {
+        const response = turnstile.getResponse(widgetIdRef.current)
+        if (response) {
+          clearTimeout(timeout)
+          clearInterval(checkInterval)
+          setTurnstileToken(response)
+          resolve(response)
+        }
+      }, 200)
+    })
+  }
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setError('')
     setIsSubmitting(true)
 
     try {
+      // Get a valid Turnstile token before submitting
+      const token = await getTurnstileToken()
+
       const response = await fetch('/api/contact', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -98,7 +136,7 @@ export default function ContactModal({ content }: { content: any }) {
           contact: formData.contact,
           message: '',
           issues: selectedIssues,
-          turnstileToken,
+          turnstileToken: token,
         }),
       })
 
@@ -115,6 +153,8 @@ export default function ContactModal({ content }: { content: any }) {
       router.push('/thank-you')
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Произошла ошибка')
+      // Reset token so next attempt gets a fresh one
+      setTurnstileToken('')
     } finally {
       setIsSubmitting(false)
     }

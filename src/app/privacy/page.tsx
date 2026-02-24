@@ -1,4 +1,4 @@
-import { getSiteContent } from '@/lib/sanity'
+import { getSiteContent } from '@/lib/content'
 import Link from 'next/link'
 
 export const dynamic = 'force-static'
@@ -8,8 +8,8 @@ export const metadata = {
   description: 'Политика в отношении обработки персональных данных',
 }
 
-export default async function PrivacyPage() {
-  const content = await getSiteContent()
+export default function PrivacyPage() {
+  const content = getSiteContent()
 
   const defaultPrivacy = `
 ## 1. Общие положения

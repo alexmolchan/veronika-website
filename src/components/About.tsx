@@ -1,4 +1,3 @@
-import { urlFor } from '@/lib/sanity'
 import Image from 'next/image'
 
 const features = [
@@ -17,9 +16,7 @@ const icons: Record<string, JSX.Element> = {
 
 export default function About({ content }: { content: any }) {
   const paragraphs = content?.aboutText?.split('\n\n').filter(Boolean) || []
-  const aboutImageUrl = content?.aboutImage
-    ? urlFor(content.aboutImage).width(500).height(550).quality(80).url()
-    : '/images/about.jpg'
+  const aboutImageUrl = content?.aboutImage || '/images/about.jpg'
 
   return (
     <section id="about" className="py-28 px-[5%] bg-off-white" aria-labelledby="about-title">

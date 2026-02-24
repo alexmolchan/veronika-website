@@ -1,4 +1,4 @@
-import { getSiteContent } from '@/lib/sanity'
+import { getSiteContent } from '@/lib/content'
 import Link from 'next/link'
 import ThankYouTracker from '@/components/ThankYouTracker'
 
@@ -10,8 +10,8 @@ export const metadata = {
   robots: { index: false, follow: false },
 }
 
-export default async function ThankYouPage() {
-  const content = await getSiteContent()
+export default function ThankYouPage() {
+  const content = getSiteContent()
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-olive-light px-[5%] py-20">

@@ -1,4 +1,4 @@
-import { getSiteContent } from '@/lib/sanity'
+import { getSiteContent } from '@/lib/content'
 import Header from '@/components/Header'
 import Hero from '@/components/Hero'
 import MethodsBar from '@/components/MethodsBar'
@@ -15,8 +15,8 @@ import StickyBookButton from '@/components/StickyBookButton'
 // Static export - content updates require new build
 export const dynamic = 'force-static'
 
-export default async function Home() {
-  const content = await getSiteContent()
+export default function Home() {
+  const content = getSiteContent()
 
   return (
     <ClientWrapper content={content}>

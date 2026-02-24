@@ -1,6 +1,5 @@
 'use client'
 
-import { urlFor } from '@/lib/sanity'
 import Image from 'next/image'
 import { useForm } from '@/context/FormContext'
 import { trackCTAClick } from '@/lib/analytics'
@@ -18,9 +17,7 @@ export default function Hero({ content }: { content: any }) {
     return { number, label }
   }) || []
 
-  const heroImageUrl = content?.photo
-    ? urlFor(content.photo).width(600).height(750).quality(85).url()
-    : '/images/hero.jpg'
+  const heroImageUrl = content?.photo || '/images/hero.jpg'
 
   return (
     <section className="min-h-[100svh] grid grid-cols-1 lg:grid-cols-2 items-center px-[5%] pt-24 lg:pt-32 pb-12 lg:pb-20 gap-8 lg:gap-16 bg-white">
