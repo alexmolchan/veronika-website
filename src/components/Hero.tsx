@@ -48,7 +48,7 @@ export default function Hero({ content }: { content: any }) {
         </div>
         <h1 className="font-serif text-3xl md:text-5xl lg:text-6xl font-medium text-charcoal mb-4 lg:mb-6">
           {content?.name || 'Вероника'}{' '}
-          <span className="text-grass italic">{content?.lastName || 'Хмельницкая'}</span>
+          <span className="text-grass">{content?.lastName || 'Хмельницкая'}</span>
         </h1>
         <p className="text-gray text-base lg:text-lg mb-6 lg:mb-10 leading-relaxed">
           {content?.mainDescription || 'Дипломированный психолог, консультант в когнитивно-поведенческом подходе, член Белорусского общества когнитивно-поведенческой терапии. Коуч и тренер практик осознанности.'}
