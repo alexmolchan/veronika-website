@@ -38,10 +38,17 @@ export const onRequestPost = async (context: { request: Request; env: Env }) => 
       }
     )
 
-    const turnstileResult = await turnstileVerification.json() as { success: boolean }
+    const turnstileResult = await turnstileVerification.json() as { success: boolean; 'error-codes'?: string[] }
     if (!turnstileResult.success) {
+      const errorCodes = turnstileResult['error-codes'] || []
+      console.error('Turnstile verification failed:', JSON.stringify(turnstileResult))
+      console.error('Token received:', data.turnstileToken ? `${data.turnstileToken.substring(0, 20)}...` : 'EMPTY')
+      console.error('Secret key present:', !!env.TURNSTILE_SECRET_KEY)
       return new Response(
-        JSON.stringify({ error: 'Проверка безопасности не пройдена. Попробуйте ещё раз.' }),
+        JSON.stringify({
+          error: 'Проверка безопасности не пройдена. Попробуйте ещё раз.',
+          debug: { errorCodes, hasToken: !!data.turnstileToken, hasSecret: !!env.TURNSTILE_SECRET_KEY }
+        }),
         { status: 400, headers: { 'Content-Type': 'application/json' } }
       )
     }
