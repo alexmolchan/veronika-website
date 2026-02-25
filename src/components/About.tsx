@@ -1,6 +1,6 @@
 import Image from 'next/image'
 
-const features = [
+const defaultFeatures = [
   { icon: 'shield', title: 'Безопасность', desc: 'Бережное пространство для работы' },
   { icon: 'heart', title: 'Принятие', desc: 'Безоценочное отношение' },
   { icon: 'clock', title: 'Ваш темп', desc: 'Опора на ваш запрос' },
@@ -15,8 +15,10 @@ const icons: Record<string, JSX.Element> = {
 }
 
 export default function About({ content }: { content: any }) {
-  const paragraphs = content?.aboutText?.split('\n\n').filter(Boolean) || []
+  const aboutText: string = content?.aboutText || ''
+  const paragraphs = aboutText.split('\n').filter((p: string) => p.trim())
   const aboutImageUrl = content?.aboutImage || '/images/about.jpg'
+  const features = content?.aboutFeatures || defaultFeatures
 
   return (
     <section id="about" className="py-28 px-[5%] bg-off-white" aria-labelledby="about-title">
@@ -39,19 +41,11 @@ export default function About({ content }: { content: any }) {
           <h2 id="about-title" className="font-serif text-3xl lg:text-4xl mb-8 leading-tight text-charcoal">
             {content?.aboutTitle || 'Путь в психологию для меня был не случайным'}
           </h2>
-          {paragraphs.length > 0 ? (
-            paragraphs.map((p: string, i: number) => (
-              <p key={i} className="text-gray mb-5 leading-relaxed">{p}</p>
-            ))
-          ) : (
-            <>
-              <p className="text-gray mb-5 leading-relaxed">Это осознанный выбор, сделанный из искреннего интереса к внутреннему миру человека — к тому, как мы чувствуем, выбираем, справляемся и меняемся.</p>
-              <p className="text-gray mb-5 leading-relaxed">В терапии для меня важны равные и живые отношения. Я не занимаю позицию «знающего, как правильно», и не даю готовых рецептов жизни. Моя роль — выстраивать пространство, в котором вы остаётесь взрослым, принимающим решения человеком, а я рядом — с вниманием, поддержкой, профессиональной опорой и ясной структурой процесса.</p>
-              <p className="text-gray mb-5 leading-relaxed">Я опираюсь на ваш запрос и ваш темп, не навязываю взглядов, но помогаю разбираться в происходящем, используя методы с доказанной эффективностью.</p>
-            </>
-          )}
+          {paragraphs.map((p: string, i: number) => (
+            <p key={i} className="text-gray mb-5 leading-relaxed">{p}</p>
+          ))}
           <ul className="grid grid-cols-1 sm:grid-cols-2 gap-6 mt-10 pt-10 border-t border-sand list-none" role="list">
-            {features.map((f, i) => (
+            {features.map((f: any, i: number) => (
               <li key={i} className="flex items-start gap-4">
                 <div className="w-11 h-11 bg-olive-light flex items-center justify-center shrink-0">
                   {icons[f.icon]}

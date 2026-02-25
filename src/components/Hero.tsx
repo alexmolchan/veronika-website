@@ -12,11 +12,7 @@ export default function Hero({ content }: { content: any }) {
     openModal()
   }
 
-  const stats = content?.stats?.split('\n').map((line: string) => {
-    const [number, label] = line.split('|').map((s: string) => s.trim())
-    return { number, label }
-  }) || []
-
+  const stats = content?.stats || []
   const heroImageUrl = content?.photo || '/images/hero.jpg'
 
   return (
@@ -54,7 +50,7 @@ export default function Hero({ content }: { content: any }) {
           {content?.mainDescription || 'Дипломированный психолог, консультант в когнитивно-поведенческом подходе, член Белорусского общества когнитивно-поведенческой терапии. Коуч и тренер практик осознанности.'}
         </p>
 
-        {/* CTA Buttons - Записаться is now primary */}
+        {/* CTA Buttons */}
         <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center lg:justify-start mb-8 lg:mb-12">
           <button
             onClick={handleBookClick}
@@ -75,7 +71,7 @@ export default function Hero({ content }: { content: any }) {
           </a>
         </div>
 
-        {/* Stats - compact on mobile */}
+        {/* Stats */}
         <div className="flex gap-8 lg:gap-12 pt-6 lg:pt-8 border-t border-sand justify-center lg:justify-start">
           {stats.map((stat: any, i: number) => (
             <div key={i} className="text-center lg:text-left">

@@ -1,6 +1,6 @@
 import Image from 'next/image'
 
-const formatItems = [
+const defaultFormatItems = [
   { icon: 'user', title: 'Индивидуальная терапия', desc: 'Работаю с совершеннолетними от 18 лет' },
   { icon: 'calendar', title: 'Регулярность встреч', desc: 'Раз в неделю или раз в две недели' },
   { icon: 'clock', title: 'Длительность сессии', desc: '60 минут онлайн через Zoom' },
@@ -15,6 +15,8 @@ const icons: Record<string, JSX.Element> = {
 }
 
 export default function Format({ content }: { content: any }) {
+  const formatItems = content?.formatItems || defaultFormatItems
+
   return (
     <section id="format" className="py-28 px-[5%] bg-off-white" aria-labelledby="format-title">
       <div className="grid grid-cols-1 lg:grid-cols-[1.2fr_1fr] gap-20 items-center max-w-5xl mx-auto">
@@ -24,7 +26,7 @@ export default function Format({ content }: { content: any }) {
           </div>
           <h2 id="format-title" className="font-serif text-3xl lg:text-4xl mb-8 text-charcoal">Как проходит работа</h2>
           <ul className="space-y-0 list-none" role="list">
-            {formatItems.map((item, i) => (
+            {formatItems.map((item: any, i: number) => (
               <li key={i} className="flex items-start gap-5 py-6 border-b border-sand last:border-b-0">
                 <div className="w-12 h-12 bg-grass flex items-center justify-center text-white shrink-0">
                   {icons[item.icon]}

@@ -10,7 +10,7 @@ const defaultIssues = [
 export default function Issues({ content }: { content: any }) {
   const { selectedIssues, setSelectedIssues, openModal } = useForm()
 
-  const issues = content?.issuesList?.split('\n').filter(Boolean) || defaultIssues
+  const issues: string[] = content?.issues || defaultIssues
 
   const toggle = (issue: string) => {
     setSelectedIssues(
@@ -18,10 +18,6 @@ export default function Issues({ content }: { content: any }) {
         ? selectedIssues.filter(x => x !== issue)
         : [...selectedIssues, issue]
     )
-  }
-
-  const handleBooking = () => {
-    openModal()
   }
 
   return (
@@ -50,7 +46,7 @@ export default function Issues({ content }: { content: any }) {
       </div>
       <div className={`text-center mt-12 transition-all duration-400 ${selectedIssues.length > 0 ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-5 pointer-events-none'}`}>
         <button
-          onClick={handleBooking}
+          onClick={() => openModal()}
           className="inline-flex items-center gap-3 px-8 py-4 bg-white text-grass font-medium rounded-full hover:bg-grass-light hover:text-white transition-all"
         >
           Записаться

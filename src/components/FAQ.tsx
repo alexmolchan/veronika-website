@@ -18,10 +18,7 @@ export default function FAQ({ content }: { content: any }) {
     setActive(prev => prev === index ? -1 : index)
   }, [])
 
-  const faqItems = content?.faq?.split('\n').map((line: string) => {
-    const [q, a] = line.split('|').map((s: string) => s.trim())
-    return { q, a }
-  }).filter((item: any) => item.q && item.a) || defaultFaq
+  const faqItems = content?.faq || defaultFaq
 
   return (
     <section id="faq" className="py-28 px-[5%] bg-white" aria-labelledby="faq-title">

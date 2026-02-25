@@ -1,5 +1,5 @@
 export default function MethodsBar({ content }: { content: any }) {
-  const methods = content?.methods?.split('\n').filter(Boolean) || [
+  const methods: string[] = content?.methods || [
     'Когнитивно-поведенческая терапия',
     'Терапия принятия и ответственности',
     'Схема-терапия',
