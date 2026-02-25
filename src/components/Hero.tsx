@@ -25,7 +25,7 @@ export default function Hero({ content }: { content: any }) {
           width={480}
           height={600}
           priority
-          className="w-full h-[280px] lg:h-[600px] object-cover object-top rounded-2xl lg:rounded-none"
+          className="w-full h-[280px] lg:h-auto object-cover object-top rounded-2xl lg:rounded-none"
           sizes="(max-width: 768px) 280px, 480px"
         />
         {/* Quote - hidden on mobile */}
