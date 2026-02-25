@@ -26,7 +26,7 @@ export default function About({ content }: { content: any }) {
         <div className="max-w-lg mx-auto lg:max-w-none">
           <Image
             src={aboutImageUrl}
-            alt="Вероника Хмельницкая — о подходе к работе"
+            alt={content?.aboutImageAlt || "Вероника Хмельницкая — о подходе к работе"}
             width={500}
             height={550}
             loading="lazy"

@@ -41,7 +41,7 @@ export default function Services({ content }: { content: any }) {
               <div className="aspect-square overflow-hidden relative">
                 <Image
                   src={service.image}
-                  alt={service.title}
+                  alt={service.imageAlt || service.title}
                   width={400}
                   height={400}
                   loading="lazy"

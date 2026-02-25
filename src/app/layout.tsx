@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from 'next'
-import { Inter, Cormorant_Garamond } from 'next/font/google'
+import { Inter, Playfair_Display } from 'next/font/google'
 import Script from 'next/script'
 import './globals.css'
 
@@ -12,11 +12,11 @@ const inter = Inter({
   variable: '--font-inter',
 })
 
-const cormorant = Cormorant_Garamond({
+const playfair = Playfair_Display({
   subsets: ['cyrillic'],
-  weight: ['500'],
+  weight: ['400', '500', '600'],
   display: 'swap',
-  variable: '--font-cormorant',
+  variable: '--font-playfair',
 })
 
 export const viewport: Viewport = {
@@ -81,7 +81,7 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="ru" className={`${inter.variable} ${cormorant.variable}`}>
+    <html lang="ru" className={`${inter.variable} ${playfair.variable}`}>
       <head>
         {/* Google Analytics 4 */}
         <Script

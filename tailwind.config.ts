@@ -23,7 +23,7 @@ const config: Config = {
         'gray-light': '#767676',
       },
       fontFamily: {
-        serif: ['Cormorant Garamond', 'serif'],
+        serif: ['Playfair Display', 'serif'],
         sans: ['Inter', 'sans-serif'],
       },
     },

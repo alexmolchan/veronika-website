@@ -41,8 +41,8 @@ export default function Format({ content }: { content: any }) {
         </div>
         <div className="order-first lg:order-last">
           <Image
-            src="/images/format.jpg"
-            alt="Онлайн-сессия психологического консультирования"
+            src={content?.formatImage || "/images/format.jpg"}
+            alt={content?.formatImageAlt || "Онлайн-сессия психологического консультирования"}
             width={500}
             height={500}
             loading="lazy"

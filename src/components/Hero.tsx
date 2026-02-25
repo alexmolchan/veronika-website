@@ -21,7 +21,7 @@ export default function Hero({ content }: { content: any }) {
       <div className="relative order-1 lg:order-2 max-w-[280px] lg:max-w-none mx-auto lg:mx-0">
         <Image
           src={heroImageUrl}
-          alt={`${content?.name || 'Вероника'} ${content?.lastName || 'Хмельницкая'} — психолог, коуч`}
+          alt={content?.photoAlt || `${content?.name || 'Вероника'} ${content?.lastName || 'Хмельницкая'} — психолог, коуч`}
           width={480}
           height={600}
           priority
