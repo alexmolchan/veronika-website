@@ -25,7 +25,7 @@ aboutImage: /images/hero.jpg
 # --- Статистика (главная страница) ---
 
 stats:
-  - number: "7+"
+  - number: "5+"
     label: лет практики
   - number: "200+"
     label: клиентов
